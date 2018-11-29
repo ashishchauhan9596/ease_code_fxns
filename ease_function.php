@@ -1,3 +1,5 @@
+<?php
+
 //convert xml file to array:  $file = path or name of file
 function xml_to_arr($file)
 {
