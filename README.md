@@ -1,2 +1,3 @@
 # ease_code_fxns
-ease coding functions in php
+  -provide each function for various problem
+  -copy and play
