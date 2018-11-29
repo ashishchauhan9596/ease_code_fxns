@@ -1,5 +1,5 @@
 # ease_code_fxns
-1. provide each function for various problem
+l. provide each function for various problem.
 
 
-2. copy and play
+l. copy and play.
