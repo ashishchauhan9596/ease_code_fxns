@@ -50,7 +50,6 @@
 			{
 				$node_to_json = json_encode($node);
 				$result[] = json_decode($node_to_json, true);
-				echo "in here";
 				if(sizeof($result) > $limit)
 				{
 					return $result;
