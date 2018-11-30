@@ -24,3 +24,46 @@
 	}
 	$search_data = search($arr, 'author', 'San Francisco');
 	print_r($search_data);
+	
+	//direct xmltoarray with search elemnts funtionality
+	function search_xml($path, $parentNode, $limit, $keyword = null, $key = null)
+	{
+		$result = [];
+		$z = new XMLReader;
+		$z->open($path);
+		$doc = new DOMDocument;
+		while ($z->read() && $z->name !== $parentNode);
+		while ($z->name === $parentNode)
+		{
+		    $node = simplexml_import_dom($doc->importNode($z->expand(), true));
+		    if (trim($keyword) != '' && strpos($node->$key, $keyword) !== false) 
+			{
+				// print_r($node);
+				$node_to_json = json_encode($node);
+				$result[] = json_decode($node_to_json, true);
+				if(sizeof($result) > $limit)
+				{
+					return $result;
+					die();
+				}
+			}else
+			{
+				$node_to_json = json_encode($node);
+				$result[] = json_decode($node_to_json, true);
+				echo "in here";
+				if(sizeof($result) > $limit)
+				{
+					return $result;
+					die();
+				}
+			}
+		    $z->next($parentNode);
+		}
+		return $result;
+	}
+	// if you don't want to search hit using these parameter
+	$xml_serach_arr = search_xml("test.xml",'product', '4', 'test', 'name');
+	// if you don't want to search hit using these parameter and product is parent node
+	$xml_serach_arr = search_xml("test.xml",'product' ,'4');
+
+	print_r($xml_serach_arr);
