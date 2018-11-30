@@ -36,26 +36,28 @@
 		while ($z->name === $parentNode)
 		{
 		    $node = simplexml_import_dom($doc->importNode($z->expand(), true));
-		    if (trim($keyword) != '' && strpos($node->$key, $keyword) !== false) 
+		    if (strpos($node->$key, $keyword) !== false) 
+		    {
+			// echo "<pre>";
+			// print_r($node);
+			$node_to_json = json_encode($node);
+			$result[] = json_decode($node_to_json, true);
+			if(sizeof($result) > $limit)
 			{
-				// print_r($node);
-				$node_to_json = json_encode($node);
-				$result[] = json_decode($node_to_json, true);
-				if(sizeof($result) > $limit)
-				{
-					return $result;
-					die();
-				}
-			}else
-			{
-				$node_to_json = json_encode($node);
-				$result[] = json_decode($node_to_json, true);
-				if(sizeof($result) > $limit)
-				{
-					return $result;
-					die();
-				}
+				return $result;
+				die();
 			}
+		     }
+		    if(trim($keyword) == '' && trim($key) == '')
+		    {
+			$node_to_json = json_encode($node);
+			$result[] = json_decode($node_to_json, true);
+			if(sizeof($result) > $limit)
+			{
+				return $result;
+				die();
+			}
+	 	    }
 		    $z->next($parentNode);
 		}
 		return $result;
