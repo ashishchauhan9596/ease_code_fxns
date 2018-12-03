@@ -36,28 +36,37 @@
 		while ($z->name === $parentNode)
 		{
 		    $node = simplexml_import_dom($doc->importNode($z->expand(), true));
-		    if (strpos($node->$key, $keyword) !== false) 
-		    {
-			// echo "<pre>";
-			// print_r($node);
-			$node_to_json = json_encode($node);
-			$result[] = json_decode($node_to_json, true);
-			if(sizeof($result) > $limit)
-			{
-				return $result;
-				die();
-			}
-		     }
-		    if(trim($keyword) == '' && trim($key) == '')
+		    if (trim($limit) == '') 
 		    {
 			$node_to_json = json_encode($node);
 			$result[] = json_decode($node_to_json, true);
-			if(sizeof($result) > $limit)
+		    }
+		    elseif(trim($keyword) == '' && trim($key) == '' && trim($limit) != '')
 			{
-				return $result;
-				die();
+				$node_to_json = json_encode($node);
+				$result[] = json_decode($node_to_json, true);
+				if(sizeof($result) > $limit)
+				{
+					return $result;
+					die();
+				}
 			}
-	 	    }
+		    elseif(strpos( strtolower($node->$key), strtolower($keyword)) !== false) 
+			{
+				// echo "<pre>";
+				// print_r($node);
+				$node_to_json = json_encode($node);
+				$result[] = json_decode($node_to_json, true);
+				if(sizeof($result) > $limit)
+				{
+					return $result;
+					die();
+				}
+			}
+		    else
+		    {
+			$result[] = "No result found.";
+		    }
 		    $z->next($parentNode);
 		}
 		return $result;
