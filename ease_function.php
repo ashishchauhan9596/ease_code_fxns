@@ -37,10 +37,10 @@
 		{
 		    $node = simplexml_import_dom($doc->importNode($z->expand(), true));
 		    if (trim($limit) == '') 
-		    {
-			$node_to_json = json_encode($node);
-			$result[] = json_decode($node_to_json, true);
-		    }
+		    	{
+				$node_to_json = json_encode($node);
+				$result[] = json_decode($node_to_json, true);
+		    	}
 		    elseif(trim($keyword) == '' && trim($key) == '' && trim($limit) != '')
 			{
 				$node_to_json = json_encode($node);
@@ -64,9 +64,9 @@
 				}
 			}
 		    else
-		    {
-			$result[] = "No result found.";
-		    }
+		   	{
+				$result[] = "No result found.";
+		   	}
 		    $z->next($parentNode);
 		}
 		return $result;
