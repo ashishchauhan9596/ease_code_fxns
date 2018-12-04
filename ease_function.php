@@ -26,22 +26,23 @@
 	print_r($search_data);
 	
 	//direct xmltoarray with search elemnts funtionality
-	function search_xml($path, $parentNode, $limit, $keyword = null, $key = null)
+	function search_xml($path, $parentnode, $limit=null, $key = null, $keyword = null)
 	{
+		// echo $key." AND ". $keyword;
 		$result = [];
 		$z = new XMLReader;
 		$z->open($path);
 		$doc = new DOMDocument;
-		while ($z->read() && $z->name !== $parentNode);
-		while ($z->name === $parentNode)
+		while ($z->read() && $z->name !== $parentnode);
+		while ($z->name === $parentnode)
 		{
 		    $node = simplexml_import_dom($doc->importNode($z->expand(), true));
 		    if (trim($limit) == '') 
 		    	{
-				$node_to_json = json_encode($node);
+		    		$node_to_json = json_encode($node);
 				$result[] = json_decode($node_to_json, true);
 		    	}
-		    elseif(trim($keyword) == '' && trim($key) == '' && trim($limit) != '')
+		    elseif(trim($keyword) == '' && trim($key) == '')
 			{
 				$node_to_json = json_encode($node);
 				$result[] = json_decode($node_to_json, true);
@@ -51,7 +52,7 @@
 					die();
 				}
 			}
-		    elseif(strpos( strtolower($node->$key), strtolower($keyword)) !== false) 
+		    elseif(trim($keyword) != '' && trim($key) != '' && strpos(strtolower($node->$key), strtolower($keyword)) !== false) 
 			{
 				// echo "<pre>";
 				// print_r($node);
@@ -63,14 +64,15 @@
 					die();
 				}
 			}
-		    else
-		   	{
-				$result[] = "No result found.";
-		   	}
-		    $z->next($parentNode);
+		    $z->next($parentnode);
 		}
-		return $result;
-	}
+		if(empty($result)){
+			$result[] = "No result found.";
+			return $result;
+		}else{
+			return $result;
+		}
+	    }
 	// if you don't want to search hit using these parameter
 	$xml_serach_arr = search_xml("test.xml",'product', '4', 'test', 'name');
 	// if you don't want to search hit using these parameter and product is parent node
